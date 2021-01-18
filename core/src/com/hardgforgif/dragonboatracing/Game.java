@@ -8,22 +8,33 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.google.gson.Gson;
 import com.hardgforgif.dragonboatracing.UI.GamePlayUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
 import com.hardgforgif.dragonboatracing.UI.PauseUI;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.*;
+import com.hardgforgif.dragonboatracing.persistence.PersistentData;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
-	private Player player;
-	private AI[] opponents = new AI[3];
-	private Map[] map;
-	private Batch batch;
-	private Batch UIbatch;
-	private OrthographicCamera camera;
-	private World[] world;
+
+	private static final String SAVE_DIR = "/saves/";
+
+	public Player player;
+	public AI[] opponents = new AI[3];
+	public Map[] map;
+	public Batch batch;
+	public Batch UIbatch;
+	public OrthographicCamera camera;
+	public World[] world;
 
 
 	private Vector2 mousePosition = new Vector2();
@@ -78,6 +89,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 		// Set the app's input processor
 		Gdx.input.setInputProcessor(this);
+
+		GameData.currentUI = new MenuUI(this);
 	}
 
 	/**
@@ -258,7 +271,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				// Create our PauseUI and set it to the current UI
 				GameData.pauseState = true;
 				GameData.gamePlayState = false;
-				GameData.currentUI = new PauseUI();
+				GameData.currentUI = new PauseUI(this);
 			}
 
 			// If it's the first iteration in this state, the boats need to be created at their starting positions
@@ -447,7 +460,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				}
 				GameData.currentLeg = 0;
 				GameData.mainMenuState = true;
-				GameData.currentUI = new MenuUI();
+				GameData.currentUI = new MenuUI(this);
 			}
 			GameData.resetGameState = false;
 
@@ -456,6 +469,56 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		// If we haven't clicked anywhere in the last frame, reset the click position
 		if(clickPosition.x != 0f && clickPosition.y != 0f)
 			clickPosition.set(0f,0f);
+	}
+
+	/**
+	 * Save the game's current state
+	 */
+	public void save() {
+		// Create directory if required
+		File saveDir = new File(SAVE_DIR);
+		if (!saveDir.exists()) {
+			saveDir.mkdirs();
+		}
+
+		Gson gson = new Gson();
+		String data;
+		try {
+			data = gson.toJson(new PersistentData(this));
+		} catch(Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		try {
+			FileWriter writer = new FileWriter(saveDir.toPath() + "/data.json");
+			writer.write(data);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Load the game from save file
+	 */
+	public void load() {
+		// Create directory if required
+		File saveDir = new File(SAVE_DIR + "/data.json");
+		if (!saveDir.exists()) {
+			return;
+		}
+
+		Gson gson = new Gson();
+		try {
+			String raw = new String(Files.readAllBytes(saveDir.toPath()));
+			PersistentData data = gson.fromJson(raw, PersistentData.class);
+			data.load(this);
+			GameData.gamePlayState = true;
+			GameData.mainMenuState = false;
+			GameData.currentUI = new GamePlayUI();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -522,4 +585,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
+
+
+
 }

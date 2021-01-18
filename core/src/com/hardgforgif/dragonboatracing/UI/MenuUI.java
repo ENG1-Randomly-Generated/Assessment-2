@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.hardgforgif.dragonboatracing.Game;
 import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.core.Player;
 
@@ -31,7 +32,7 @@ public class MenuUI extends UI {
     ScrollingBackground scrollingBackground = new ScrollingBackground();
 
 
-    public MenuUI(){
+    public MenuUI(Game game){
         scrollingBackground.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         scrollingBackground.setSpeedFixed(true);
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
@@ -41,12 +42,23 @@ public class MenuUI extends UI {
         exitButtonActive = new Texture("ExitSelected.png");
         exitButtonInactive = new Texture("ExitUnselected.png");
         logo = new Texture("Title.png");
+
+        UI.Button load = new UI.Button(playButtonActive, playButtonInactive, 0.5f, 0.2f, 0.4f, 0.15f, new ButtonListener() {
+            @Override
+            public void onClick() {
+                game.load();
+            }
+        });
+
+        this.addButton(load);
+
     }
 
     @Override
     public void drawUI(Batch batch, Vector2 mousePos, float screenWidth, float delta) {
         batch.begin();
         scrollingBackground.updateAndRender(delta, batch);
+        this.drawButtons(batch, mousePos);
         batch.draw(logo, screenWidth / 2 - LOGO_WIDTH / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT);
 
         // If the mouse is not hovered over the buttons, draw the unselected buttons
@@ -85,6 +97,7 @@ public class MenuUI extends UI {
 
     @Override
     public void getInput(float screenWidth, Vector2 clickPos) {
+        super.getInput(screenWidth, clickPos);
         // If the play button is clicked
         float x = screenWidth / 2 - PLAY_BUTTON_WIDTH / 2;
         if (

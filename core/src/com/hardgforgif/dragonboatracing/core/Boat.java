@@ -27,6 +27,7 @@ public class Boat {
     public Sprite boatSprite;
     public Texture boatTexture;
     public Body boatBody;
+    public int boatType;
 
     private TextureAtlas textureAtlas;
     private Animation animation;
@@ -47,6 +48,7 @@ public class Boat {
         boatTexture = new Texture("Boat" + (boatType + 1) + ".png");
 
         textureAtlas = new TextureAtlas(Gdx.files.internal("Boats/Boat" + (boatType + 1) +  ".atlas"));
+        this.boatType = boatType;
         animation = new Animation(1/15f, textureAtlas.getRegions());
 
         this.lane = lane;
