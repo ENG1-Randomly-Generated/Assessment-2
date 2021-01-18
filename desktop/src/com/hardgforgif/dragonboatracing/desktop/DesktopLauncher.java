@@ -7,10 +7,9 @@ import com.hardgforgif.dragonboatracing.Game;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.forceExit = false;
 		config.width = 1280;
 		config.height = 720;
-		config.fullscreen = true;
+		config.fullscreen = false;
 		new LwjglApplication(new Game(), config);
 	}
 }
