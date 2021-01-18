@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.hardgforgif.dragonboatracing.UI.GamePlayUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
+import com.hardgforgif.dragonboatracing.UI.PauseUI;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.*;
 
@@ -241,15 +242,25 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// If the game is in one of the static state
-		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState){
+		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState || GameData.pauseState) {
 			// Draw the UI and wait for the input
+
 			GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 			GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 
 		}
 
 		// Otherwise, if we are in the game play state
-		else if(GameData.gamePlayState){
+		else if (GameData.gamePlayState){
+
+			// Check if the user just pressed ESC
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+				// Create our PauseUI and set it to the current UI
+				GameData.pauseState = true;
+				GameData.gamePlayState = false;
+				GameData.currentUI = new PauseUI();
+			}
+
 			// If it's the first iteration in this state, the boats need to be created at their starting positions
 			if (player == null){
 				// Create the player boat

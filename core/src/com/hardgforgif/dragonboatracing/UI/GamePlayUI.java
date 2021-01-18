@@ -48,7 +48,6 @@ public class GamePlayUI extends UI{
 
     @Override
     public void drawUI(Batch batch, Vector2 mousePos, float screenWidth, float delta) {
-
     }
 
     @Override
