@@ -42,8 +42,9 @@ public class MenuUI extends UI {
         exitButtonActive = new Texture("ExitSelected.png");
         exitButtonInactive = new Texture("ExitUnselected.png");
         logo = new Texture("Title.png");
+        
 
-        UI.Button load = new UI.Button(playButtonActive, playButtonInactive, 0.5f, 0.2f, 0.4f, 0.15f, new ButtonListener() {
+        UI.Button load = new UI.Button(new Texture("LoadUnselected.png"), new Texture("LoadSelected.png"), 0.5f, 0.2f, 0.4f, 0.15f, new ButtonListener() {
             @Override
             public void onClick() {
                 game.load();
