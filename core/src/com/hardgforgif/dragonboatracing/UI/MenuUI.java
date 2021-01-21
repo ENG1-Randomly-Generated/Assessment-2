@@ -37,55 +37,42 @@ public class MenuUI extends UI {
         scrollingBackground.setSpeedFixed(true);
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
 
-        playButtonActive = new Texture("PlaySelected.png");
-        playButtonInactive = new Texture("PlayUnselected.png");
-        exitButtonActive = new Texture("ExitSelected.png");
-        exitButtonInactive = new Texture("ExitUnselected.png");
         logo = new Texture("Title.png");
-        
 
-        UI.Button load = new UI.Button(new Texture("LoadUnselected.png"), new Texture("LoadSelected.png"), 0.5f, 0.2f, 0.4f, 0.15f, new ButtonListener() {
+        UI.Button play = new UI.Button(new Texture("PlayUnselected.png"), new Texture("PlaySelected.png"), 0.5f, 0.5f, 0.3f, 0.15f, new ButtonListener() {
+            @Override
+            public void onClick() {
+                GameData.mainMenuState = false;
+                GameData.choosingBoatState = true;
+                GameData.currentUI = new ChoosingUI();
+            }
+        });
+        this.addButton(play);
+
+        UI.Button load = new UI.Button(new Texture("LoadUnselected.png"), new Texture("LoadSelected.png"), 0.5f, 0.34f, 0.3f, 0.15f, new ButtonListener() {
             @Override
             public void onClick() {
                 game.load();
             }
         });
-
         this.addButton(load);
+
+        UI.Button exit = new UI.Button(new Texture("ExitUnselected.png"), new Texture("ExitSelected.png"), 0.5f, 0.18f, 0.3f, 0.15f, new ButtonListener() {
+            @Override
+            public void onClick() {
+                Gdx.app.exit();
+            }
+        });
+        this.addButton(exit);
 
     }
 
     @Override
     public void drawUI(Batch batch, Vector2 mousePos, float screenWidth, float delta) {
         batch.begin();
-        scrollingBackground.updateAndRender(delta, batch);
-        this.drawButtons(batch, mousePos);
-        batch.draw(logo, screenWidth / 2 - LOGO_WIDTH / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT);
-
-        // If the mouse is not hovered over the buttons, draw the unselected buttons
-        float x = screenWidth / 2 - PLAY_BUTTON_WIDTH / 2;
-        if (
-                mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
-                        // cur pos < top_height
-                        mousePos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
-                        mousePos.y > PLAY_BUTTON_Y
-        ) {
-            batch.draw(playButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
-        } else {
-            batch.draw(playButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
-        }
-
-        // Otherwise draw the selected buttons
-        x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
-        if (
-                mousePos.x < x + EXIT_BUTTON_WIDTH && mousePos.x > x &&
-                        mousePos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
-                        mousePos.y > EXIT_BUTTON_Y
-        ) {
-            batch.draw(exitButtonActive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
-        } else {
-            batch.draw(exitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
-        }
+            scrollingBackground.updateAndRender(delta, batch);
+            this.drawButtons(batch, mousePos);
+            batch.draw(logo, screenWidth / 2 - LOGO_WIDTH / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT);
         batch.end();
 
         playMusic();
@@ -99,30 +86,5 @@ public class MenuUI extends UI {
     @Override
     public void getInput(float screenWidth, Vector2 clickPos) {
         super.getInput(screenWidth, clickPos);
-        // If the play button is clicked
-        float x = screenWidth / 2 - PLAY_BUTTON_WIDTH / 2;
-        if (
-                clickPos.x < x + PLAY_BUTTON_WIDTH && clickPos.x > x &&
-                        // cur pos < top_height
-                        clickPos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
-                        clickPos.y > PLAY_BUTTON_Y
-        ) {
-            // Switch to the choosing state
-            GameData.mainMenuState = false;
-            GameData.choosingBoatState = true;
-            GameData.currentUI = new ChoosingUI();
-        }
-
-        // If the exit button is clicked, close the game
-        x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
-        if (clickPos.x < x + EXIT_BUTTON_WIDTH && clickPos.x > x &&
-                clickPos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
-                clickPos.y > EXIT_BUTTON_Y
-        ) {
-            Gdx.app.exit();
-        }
-
-
-
     }
 }
