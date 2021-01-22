@@ -11,8 +11,8 @@ import com.hardgforgif.dragonboatracing.core.Player;
  */
 public class PersistentData {
 
-    PersistentPlayerData player;
-    PersistentAIData[] opponents;
+    PersistentBoatData player;
+    PersistentBoatData[] opponents;
     PersistentGameData gameData;
 
 
@@ -20,10 +20,10 @@ public class PersistentData {
      * Generate persistant data
      */
     public PersistentData(Game game) {
-        this.player = new PersistentPlayerData(game.player);
-        this.opponents = new PersistentAIData[game.opponents.length];
+        this.player = new PersistentBoatData(game.player, 0);
+        this.opponents = new PersistentBoatData[game.opponents.length];
         for(int i = 0; i < game.opponents.length; i++) {
-            this.opponents[i] = new PersistentAIData(game.opponents[i], i + 1);
+            this.opponents[i] = new PersistentBoatData(game.opponents[i], i + 1);
         }
 
         this.gameData = new PersistentGameData();

@@ -33,6 +33,7 @@ public class PauseUI extends UI {
             @Override
             public void onClick() {
                 game.save();
+                GameData.pauseState = false;
                 GameData.gamePlayState = false;
                 GameData.mainMenuState = true;
                 GameData.currentUI = new MenuUI(game);

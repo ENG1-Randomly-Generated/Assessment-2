@@ -12,12 +12,20 @@ import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.BodyEditorLoader;
 
 public class Obstacle {
+
+    private static final String PATH_PREFIX = "Obstacles/Obstacle";
+
     public Sprite obstacleSprite;
     private Texture obstacleTexture;
     public Body obstacleBody;
 
-    public Obstacle(String textureName){
-        obstacleTexture = new Texture(textureName);
+    public int type;
+    public float scale;
+
+
+    public Obstacle(int type){
+        this.type = type;
+        this.obstacleTexture = new Texture(PATH_PREFIX + type + ".png");
     }
 
     /**
@@ -25,9 +33,10 @@ public class Obstacle {
      * @param world World to create the body in
      * @param posX x location of the body, in meters
      * @param posY y location of the body, in meters
-     * @param bodyFile the name of the box2D editor json file for the body fixture
      */
-    public void createObstacleBody(World world, float posX, float posY, String bodyFile, float scale){
+    public void createObstacleBody(World world, float posX, float posY, float scale){
+        this.scale = scale;
+
         obstacleSprite = new Sprite(obstacleTexture);
         obstacleSprite.scale(scale);
 
@@ -39,7 +48,7 @@ public class Obstacle {
 
         obstacleBody.setUserData(this);
 
-        BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
+        BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(PATH_PREFIX + type + ".json"));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 0f;

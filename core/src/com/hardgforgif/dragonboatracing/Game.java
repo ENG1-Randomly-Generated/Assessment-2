@@ -521,6 +521,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		}
 	}
 
+	public void removeBody(Body body) {
+		this.toBeRemovedBodies.add(body);
+	}
+
 
 	public void dispose() {
 		world[GameData.currentLeg].dispose();
@@ -585,7 +589,5 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
-
-
 
 }
