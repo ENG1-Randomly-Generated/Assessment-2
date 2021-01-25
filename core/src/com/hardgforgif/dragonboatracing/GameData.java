@@ -17,9 +17,10 @@ public class GameData {
     public static boolean showResultsState = false;
     public static boolean resetGameState = false;
     public static boolean GameOverState = false;
+    public static boolean pauseState = false;
 
     // Create the game UI and the game music
-    public static UI currentUI = new MenuUI();
+    public static UI currentUI;
     public static Music music = Gdx.audio.newMusic(Gdx.files.internal("Vibing.ogg"));
 
     // Set the rations between the pixels, meters and tiles

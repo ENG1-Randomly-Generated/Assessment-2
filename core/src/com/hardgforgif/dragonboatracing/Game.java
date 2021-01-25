@@ -8,21 +8,37 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.google.gson.Gson;
 import com.hardgforgif.dragonboatracing.UI.GamePlayUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
+import com.hardgforgif.dragonboatracing.UI.PauseUI;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.*;
+import com.hardgforgif.dragonboatracing.persistence.PersistentData;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
-	private Player player;
-	private AI[] opponents = new AI[3];
-	private Map[] map;
-	private Batch batch;
-	private Batch UIbatch;
-	private OrthographicCamera camera;
-	private World[] world;
+
+	private static final String SAVE_DIR = System.getProperty("user.dir") + "/saves/";
+	private static final String SAVE_FILE = SAVE_DIR + "data.json";
+
+	public Player player;
+	public AI[] opponents = new AI[3];
+	public Map[] map;
+	public Batch batch;
+	public Batch UIbatch;
+	public OrthographicCamera camera;
+	public World[] world;
 
 
 	private Vector2 mousePosition = new Vector2();
@@ -77,6 +93,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 		// Set the app's input processor
 		Gdx.input.setInputProcessor(this);
+
+		GameData.currentUI = new MenuUI(this);
 	}
 
 	/**
@@ -241,15 +259,25 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// If the game is in one of the static state
-		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState || GameData.choosingDifficultyState){
+		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState || GameData.choosingDifficultyState || GameData.pauseState) {
 			// Draw the UI and wait for the input
+
 			GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 			GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 
 		}
 
 		// Otherwise, if we are in the game play state
-		else if(GameData.gamePlayState){
+		else if (GameData.gamePlayState){
+
+			// Check if the user just pressed ESC
+			if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+				// Create our PauseUI and set it to the current UI
+				GameData.pauseState = true;
+				GameData.gamePlayState = false;
+				GameData.currentUI = new PauseUI(this);
+			}
+
 			// If it's the first iteration in this state, the boats need to be created at their starting positions
 			if (player == null){
 				// Create the player boat
@@ -273,10 +301,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				// Find the obstacle that has this body and mark it as null
 				// so it's sprite doesn't get rendered in future frames
 				for (Lane lane : map[GameData.currentLeg].lanes)
-					for (Obstacle obstacle : lane.obstacles)
-						if (obstacle.obstacleBody == body) {
-							obstacle.obstacleBody = null;
-						}
+					// CHANGED: Now let's just remove the Obstacle object all-together, as it's not actually needed anymore
+					lane.obstacles.removeIf(obstacle -> (obstacle.obstacleBody == body));
 
 				// Remove the body from the world to avoid other collisions with it
 				world[GameData.currentLeg].destroyBody(body);
@@ -405,38 +431,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			}
 			// Otherwise we're coming from the endgame screen so we need to return to the main menu
 			else{
-				camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
-				camera.update();
 				// Reset everything for the next game
-				world = new World[3];
-				map = new Map[3];
-				for (int i = 0; i < 3; i++){
-					// Initialize the physics game World
-					world[i] = new World(new Vector2(0f, 0f), true);
-
-					// Initialize the map
-					map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
-
-					// Calculate the ratio between pixels, meters and tiles
-					GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
-					GameData.PIXELS_TO_TILES = 1/(GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
-
-					// Create the collision with the land
-					map[i].createMapCollisions("CollisionLayerLeft", world[i]);
-					map[i].createMapCollisions("CollisionLayerRight", world[i]);
-
-					// Create the lanes, and the obstacles in the physics game world
-					map[i].createLanes(world[i]);
-
-					// Create the finish line
-					map[i].createFinishLine("finishLine.png");
-
-					// Create a new collision handler for the world
-					createContactListener(world[i]);
-				}
+				this.resetWorld();
 				GameData.currentLeg = 0;
 				GameData.mainMenuState = true;
-				GameData.currentUI = new MenuUI();
+				GameData.currentUI = new MenuUI(this);
 			}
 			GameData.resetGameState = false;
 
@@ -445,6 +444,98 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		// If we haven't clicked anywhere in the last frame, reset the click position
 		if(clickPosition.x != 0f && clickPosition.y != 0f)
 			clickPosition.set(0f,0f);
+	}
+
+	/**
+	 * Reset the world
+	 * ADD: This is needed elsewhere for loading.
+	 */
+	public void resetWorld() {
+		camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+		camera.update();
+		world = new World[3];
+		map = new Map[3];
+		for (int i = 0; i < 3; i++){
+			// Initialize the physics game World
+			world[i] = new World(new Vector2(0f, 0f), true);
+
+			// Initialize the map
+			map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
+
+			// Calculate the ratio between pixels, meters and tiles
+			GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
+			GameData.PIXELS_TO_TILES = 1/(GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
+
+			// Create the collision with the land
+			map[i].createMapCollisions("CollisionLayerLeft", world[i]);
+			map[i].createMapCollisions("CollisionLayerRight", world[i]);
+
+			// Create the lanes, and the obstacles in the physics game world
+			map[i].createLanes(world[i]);
+
+			// Create the finish line
+			map[i].createFinishLine("finishLine.png");
+
+			// Create a new collision handler for the world
+			createContactListener(world[i]);
+		}
+	}
+
+	/**
+	 * Save the game's current state
+	 */
+	public void save() {
+		// Create directory if required
+		File saveDir = new File(SAVE_DIR);
+		if (!saveDir.exists()) {
+			saveDir.mkdir();
+		}
+
+		Gson gson = new Gson();
+		String data;
+		try {
+			data = gson.toJson(new PersistentData(this));
+		} catch(Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		try {
+			FileWriter writer = new FileWriter(SAVE_FILE);
+			writer.write(data);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Load the game from save file
+	 */
+	public void load() {
+		// Create directory if required
+		File saveDir = new File(SAVE_DIR);
+		if (!saveDir.exists()) {
+			return;
+		}
+
+		Gson gson = new Gson();
+		try {
+			String raw = new String(Files.readAllBytes(Paths.get(SAVE_FILE)));
+			PersistentData data = gson.fromJson(raw, PersistentData.class);
+			data.load(this);
+			GameData.mainMenuState = false;
+			GameData.gamePlayState = true;
+			GameData.currentUI = new GamePlayUI();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Return whether there exists a save which can be loaded
+	 */
+	public boolean hasSave() {
+		return new File(SAVE_DIR).exists();
 	}
 
 
@@ -511,4 +602,5 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
+
 }

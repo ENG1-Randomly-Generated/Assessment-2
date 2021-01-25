@@ -118,30 +118,30 @@ public class Map {
         MapLayer leftLayer = tiledMap.getLayers().get("CollisionLayerLeft");
         MapLayer rightLayer = tiledMap.getLayers().get("Lane1");
 
-        lanes[0] = new Lane(mapHeight, leftLayer, rightLayer, 30);
+        lanes[0] = new Lane(mapHeight, leftLayer, rightLayer);
         lanes[0].constructBoundries(unitScale);
-        lanes[0].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[0].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
 
         leftLayer = tiledMap.getLayers().get("Lane1");
         rightLayer = tiledMap.getLayers().get("Lane2");
 
-        lanes[1] = new Lane(mapHeight, leftLayer, rightLayer, 30);
+        lanes[1] = new Lane(mapHeight, leftLayer, rightLayer);
         lanes[1].constructBoundries(unitScale);
-        lanes[1].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[1].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
 
         leftLayer = tiledMap.getLayers().get("Lane2");
         rightLayer = tiledMap.getLayers().get("Lane3");
 
-        lanes[2] = new Lane(mapHeight, leftLayer, rightLayer, 30);
+        lanes[2] = new Lane(mapHeight, leftLayer, rightLayer);
         lanes[2].constructBoundries(unitScale);
-        lanes[2].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[2].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
 
         leftLayer = tiledMap.getLayers().get("Lane3");
         rightLayer = tiledMap.getLayers().get("CollisionLayerRight");
 
-        lanes[3] = new Lane(mapHeight, leftLayer, rightLayer, 30);
+        lanes[3] = new Lane(mapHeight, leftLayer, rightLayer);
         lanes[3].constructBoundries(unitScale);
-        lanes[3].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[3].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
     }
 
     /**
