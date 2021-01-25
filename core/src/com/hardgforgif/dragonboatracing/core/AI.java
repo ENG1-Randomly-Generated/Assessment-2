@@ -14,11 +14,11 @@ public class AI extends Boat{
 
     public AI(float robustness, float stamina, float handling, float speed, int boatType, Lane lane) {
         super(robustness, stamina, handling, speed, boatType, lane);
-        this.robustness *= GameData.difficulty[GameData.currentLeg];
-        this.stamina *= GameData.difficulty[GameData.currentLeg];
-        this.maneuverability *= GameData.difficulty[GameData.currentLeg];
-        this.speed *= GameData.difficulty[GameData.currentLeg];
-        this.acceleration *= GameData.difficulty[GameData.currentLeg];
+        this.robustness *= GameData.difficulty[0];
+        this.stamina *= GameData.difficulty[1];
+        this.maneuverability *= GameData.difficulty[2];
+        this.speed *= GameData.difficulty[3];
+        this.acceleration *= GameData.difficulty[4];
     }
 
     /**
