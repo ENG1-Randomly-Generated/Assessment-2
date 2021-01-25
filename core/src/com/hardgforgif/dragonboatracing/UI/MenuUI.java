@@ -52,6 +52,7 @@ public class MenuUI extends UI {
         UI.Button load = new UI.Button(new Texture("LoadUnselected.png"), new Texture("LoadSelected.png"), 0.5f, 0.34f, 0.3f, 0.15f, new ButtonListener() {
             @Override
             public void onClick() {
+                if (!game.hasSave()) return;
                 game.load();
             }
         });

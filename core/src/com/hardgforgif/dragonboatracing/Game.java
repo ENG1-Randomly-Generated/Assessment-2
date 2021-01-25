@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
 
-	private static final String SAVE_DIR = System.getProperty("user.dir") + "/saves/";
+	private static final String SAVE_DIR = System.getProperty("user.dir") + "/saves/data.json";
 
 	public Player player;
 	public AI[] opponents = new AI[3];
@@ -497,7 +497,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			return;
 		}
 		try {
-			FileWriter writer = new FileWriter(saveDir.toPath() + "/data.json");
+			FileWriter writer = new FileWriter(saveDir);
 			writer.write(data);
 			writer.close();
 		} catch (IOException e) {
@@ -510,7 +510,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	 */
 	public void load() {
 		// Create directory if required
-		File saveDir = new File(SAVE_DIR + "/data.json");
+		File saveDir = new File(SAVE_DIR);
 		if (!saveDir.exists()) {
 			return;
 		}
@@ -529,6 +529,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Return whether there exists a save which can be loaded
+	 */
+	public boolean hasSave() {
+		return new File(SAVE_DIR).exists();
 	}
 
 
