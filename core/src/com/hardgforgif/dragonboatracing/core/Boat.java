@@ -14,6 +14,7 @@ import com.hardgforgif.dragonboatracing.BodyEditorLoader;
 
 public class Boat {
     // Boat specs
+    public float max_robustness; // CHANGED: Adding max_robustness so that we have a reference for powerups etc
     public float robustness;
     public float stamina = 120f;
     public float maneuverability;
@@ -39,6 +40,7 @@ public class Boat {
 
     public Boat(float robustness, float speed, float acceleration, float maneuverability, int boatType, Lane lane) {
         this.robustness = robustness;
+        this.max_robustness = robustness;
         this.speed = speed;
         this.acceleration = acceleration;
         this.maneuverability = maneuverability;
