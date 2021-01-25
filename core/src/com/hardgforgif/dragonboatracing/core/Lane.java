@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.hardgforgif.dragonboatracing.GameData;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Lane {
@@ -16,18 +17,18 @@ public class Lane {
     public int rightIterator = 0;
     private MapLayer leftLayer;
     private MapLayer rightLayer;
+    public ArrayList<Obstacle> obstacles; // CHANGED: Changed to ArrayList for dynamically updating this list
+                                          // It is much easier if we have the lane's obstacles ACTUALLY reflect the obstacles, rather than some redundant
+                                          // dead ones
 
-    public Obstacle[] obstacles;
-
-    public Lane(int mapHeight, MapLayer left, MapLayer right, int nrObstacles){
+    public Lane(int mapHeight, MapLayer left, MapLayer right){
         leftBoundry = new float[mapHeight][2];
         rightBoundry = new float[mapHeight][2];
 
         leftLayer = left;
         rightLayer = right;
 
-        obstacles = new Obstacle[nrObstacles];
-
+        this.obstacles = new ArrayList<Obstacle>();
     }
 
     /**
@@ -79,16 +80,16 @@ public class Lane {
      * Spawn obstacles on the lane
      * @param world World to spawn obstacles in
      * @param mapHeight Height of the map to draw on
+     * @param n Number of obstacles to create
      */
-    public void spawnObstacles(World world, float mapHeight){
-        int nrObstacles = obstacles.length;
-        float segmentLength = mapHeight / nrObstacles;
-        for (int i = 0; i < nrObstacles; i++){
+    public void spawnObstacles(World world, float mapHeight, int n){
+        float segmentLength = mapHeight / n;
+        for (int i = 0; i < n; i++){
             int randomIndex = new Random().nextInt(6);
             float scale = 0f;
             if (randomIndex == 0 || randomIndex == 5)
                 scale = -0.8f;
-            obstacles[i] = new Obstacle(randomIndex + 1);
+            Obstacle newObstacle = new Obstacle(randomIndex + 1);
             float segmentStart = i * segmentLength;
             float yPos = (float) (600f + (segmentStart + Math.random() * segmentLength));
 
@@ -98,7 +99,9 @@ public class Lane {
             float xPos = (float) (leftLimit + Math.random() * (rightLimit - leftLimit));
 
 
-            obstacles[i].createObstacleBody(world, xPos / GameData.METERS_TO_PIXELS, yPos / GameData.METERS_TO_PIXELS, scale);
+            newObstacle.createObstacleBody(world, xPos / GameData.METERS_TO_PIXELS, yPos / GameData.METERS_TO_PIXELS, scale);
+
+            this.obstacles.add(newObstacle);
         }
     }
 

@@ -5,6 +5,8 @@ import com.hardgforgif.dragonboatracing.Game;
 import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.core.*;
 
+import java.util.ArrayList;
+
 public class PersistentBoatData {
 
     float robustness;
@@ -13,7 +15,6 @@ public class PersistentBoatData {
     public float speed;
     public float acceleration;
     public float current_speed;
-    public float turningSpeed;
     public float targetAngle;
     public int boatType;
 
@@ -30,7 +31,6 @@ public class PersistentBoatData {
         this.speed = boat.speed;
         this.acceleration = boat.acceleration;
         this.current_speed = boat.current_speed;
-        this.turningSpeed = boat.turningSpeed;
         this.targetAngle = boat.targetAngle;
         this.boatType = boat.boatType;
         this.laneNumber = laneNumber;
@@ -38,11 +38,25 @@ public class PersistentBoatData {
         this.position = boat.boatBody.getPosition();
 
         // Get obstacles in this boat's lane and convert them to persistent information
-        this.obstacles = new PersistentObstacleData[boat.lane.obstacles.length];
-        for (int i = 0; i < boat.lane.obstacles.length; i++) {
-            this.obstacles[i] = new PersistentObstacleData(boat.lane.obstacles[i]);
+        this.obstacles = new PersistentObstacleData[boat.lane.obstacles.size()];
+        for (int i = 0; i < boat.lane.obstacles.size(); i++) {
+            this.obstacles[i] = new PersistentObstacleData(boat.lane.obstacles.get(i));
         }
     }
+
+    private void loadObstacles(Game game, Lane lane) {
+        // Start by removing all the current obstacles
+        for (Obstacle obstacle : lane.obstacles) {
+            game.world[GameData.currentLeg].destroyBody(obstacle.obstacleBody);
+        }
+        lane.obstacles.clear();
+
+        // Now add our new obstacles
+        for (int i = 0; i < this.obstacles.length; i++) {
+            lane.obstacles.add(this.obstacles[i].toObstacle(game));
+        }
+    }
+
 
     public Player toPlayer(Game game) {
         Lane lane = game.map[GameData.currentLeg].lanes[this.laneNumber];
@@ -53,15 +67,9 @@ public class PersistentBoatData {
         boat.acceleration = this.acceleration;
         boat.stamina = this.stamina;
         boat.current_speed = this.current_speed;
-        boat.turningSpeed = this.turningSpeed;
         boat.targetAngle = this.targetAngle;
 
-        // Now overwrite the lane with our obstacles
-        lane.obstacles = new Obstacle[lane.obstacles.length];
-        for (int i = 0; i < lane.obstacles.length; i++) {
-            lane.obstacles[i] = this.obstacles[i].toObstacle(game);
-        }
-
+        this.loadObstacles(game, lane);
 
         return boat;
     }
@@ -75,21 +83,9 @@ public class PersistentBoatData {
         boat.acceleration = this.acceleration;
         boat.stamina = this.stamina;
         boat.current_speed = this.current_speed;
-        boat.turningSpeed = this.turningSpeed;
         boat.targetAngle = this.targetAngle;
 
-        // Delete all currently created obstacles
-        for (int i = 0; i < lane.obstacles.length; i++) {
-            // Set this to be deleted
-            game.removeBody(lane.obstacles[i].obstacleBody);
-        }
-
-        // Now fill the lane with our obstacles
-        lane.obstacles = new Obstacle[lane.obstacles.length];
-        for (int i = 0; i < lane.obstacles.length; i++) {
-            lane.obstacles[i] = this.obstacles[i].toObstacle(game);
-        }
-
+        this.loadObstacles(game, lane);
 
         return boat;
     }

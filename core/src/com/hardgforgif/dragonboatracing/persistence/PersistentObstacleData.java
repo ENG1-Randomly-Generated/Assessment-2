@@ -13,7 +13,7 @@ public class PersistentObstacleData {
 
 
     public PersistentObstacleData(Obstacle obstacle) {
-        this.position = new Vector2(obstacle.obstacleSprite.getX() / GameData.METERS_TO_PIXELS, obstacle.obstacleSprite.getY() / GameData.METERS_TO_PIXELS);
+        this.position = obstacle.obstacleBody.getPosition();
         this.type = obstacle.type;
         this.scale = obstacle.scale;
     }

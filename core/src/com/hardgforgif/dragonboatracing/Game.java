@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
 
@@ -297,10 +298,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				// Find the obstacle that has this body and mark it as null
 				// so it's sprite doesn't get rendered in future frames
 				for (Lane lane : map[GameData.currentLeg].lanes)
-					for (Obstacle obstacle : lane.obstacles)
-						if (obstacle.obstacleBody == body) {
-							obstacle.obstacleBody = null;
-						}
+					// CHANGED: Now let's just remove the Obstacle object all-together, as it's not actually needed anymore
+					lane.obstacles.removeIf(obstacle -> (obstacle.obstacleBody == body));
 
 				// Remove the body from the world to avoid other collisions with it
 				world[GameData.currentLeg].destroyBody(body);
@@ -432,32 +431,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
 				camera.update();
 				// Reset everything for the next game
-				world = new World[3];
-				map = new Map[3];
-				for (int i = 0; i < 3; i++){
-					// Initialize the physics game World
-					world[i] = new World(new Vector2(0f, 0f), true);
-
-					// Initialize the map
-					map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
-
-					// Calculate the ratio between pixels, meters and tiles
-					GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
-					GameData.PIXELS_TO_TILES = 1/(GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
-
-					// Create the collision with the land
-					map[i].createMapCollisions("CollisionLayerLeft", world[i]);
-					map[i].createMapCollisions("CollisionLayerRight", world[i]);
-
-					// Create the lanes, and the obstacles in the physics game world
-					map[i].createLanes(world[i]);
-
-					// Create the finish line
-					map[i].createFinishLine("finishLine.png");
-
-					// Create a new collision handler for the world
-					createContactListener(world[i]);
-				}
+				this.resetWorld();
 				GameData.currentLeg = 0;
 				GameData.mainMenuState = true;
 				GameData.currentUI = new MenuUI(this);
@@ -469,6 +443,39 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		// If we haven't clicked anywhere in the last frame, reset the click position
 		if(clickPosition.x != 0f && clickPosition.y != 0f)
 			clickPosition.set(0f,0f);
+	}
+
+	/**
+	 * Reset the world
+	 * ADD: This is needed elsewhere for loading.
+	 */
+	public void resetWorld() {
+		world = new World[3];
+		map = new Map[3];
+		for (int i = 0; i < 3; i++){
+			// Initialize the physics game World
+			world[i] = new World(new Vector2(0f, 0f), true);
+
+			// Initialize the map
+			map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
+
+			// Calculate the ratio between pixels, meters and tiles
+			GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
+			GameData.PIXELS_TO_TILES = 1/(GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
+
+			// Create the collision with the land
+			map[i].createMapCollisions("CollisionLayerLeft", world[i]);
+			map[i].createMapCollisions("CollisionLayerRight", world[i]);
+
+			// Create the lanes, and the obstacles in the physics game world
+			map[i].createLanes(world[i]);
+
+			// Create the finish line
+			map[i].createFinishLine("finishLine.png");
+
+			// Create a new collision handler for the world
+			createContactListener(world[i]);
+		}
 	}
 
 	/**
@@ -508,21 +515,20 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			return;
 		}
 
+		// Start by resetting our world
+		this.resetWorld();
+
 		Gson gson = new Gson();
 		try {
 			String raw = new String(Files.readAllBytes(saveDir.toPath()));
 			PersistentData data = gson.fromJson(raw, PersistentData.class);
 			data.load(this);
-			GameData.gamePlayState = true;
 			GameData.mainMenuState = false;
+			GameData.gamePlayState = true;
 			GameData.currentUI = new GamePlayUI();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void removeBody(Body body) {
-		this.toBeRemovedBodies.add(body);
 	}
 
 
