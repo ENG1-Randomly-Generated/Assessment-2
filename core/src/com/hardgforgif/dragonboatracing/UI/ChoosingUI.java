@@ -139,7 +139,7 @@ public class ChoosingUI extends UI{
 
                 // Randomise the AI boats
                 ArrayList<Integer> intList = new ArrayList<Integer>(){{add(0); add(1); add(2); add(3);}};
-                intList.remove(new Integer(i));
+                intList.remove(Integer.valueOf(i));
                 Collections.shuffle(intList);
                 GameData.boatTypes[1] = intList.get(0);
                 GameData.boatTypes[2] = intList.get(1);

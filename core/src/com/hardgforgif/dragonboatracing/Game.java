@@ -22,12 +22,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
 
-	private static final String SAVE_DIR = System.getProperty("user.dir") + "/saves/data.json";
+	private static final String SAVE_DIR = System.getProperty("user.dir") + "/saves/";
+	private static final String SAVE_FILE = SAVE_DIR + "data.json";
 
 	public Player player;
 	public AI[] opponents = new AI[3];
@@ -428,8 +431,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			}
 			// Otherwise we're coming from the endgame screen so we need to return to the main menu
 			else{
-				camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
-				camera.update();
 				// Reset everything for the next game
 				this.resetWorld();
 				GameData.currentLeg = 0;
@@ -450,6 +451,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	 * ADD: This is needed elsewhere for loading.
 	 */
 	public void resetWorld() {
+		camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+		camera.update();
 		world = new World[3];
 		map = new Map[3];
 		for (int i = 0; i < 3; i++){
@@ -485,7 +488,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		// Create directory if required
 		File saveDir = new File(SAVE_DIR);
 		if (!saveDir.exists()) {
-			saveDir.mkdirs();
+			saveDir.mkdir();
 		}
 
 		Gson gson = new Gson();
@@ -497,7 +500,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			return;
 		}
 		try {
-			FileWriter writer = new FileWriter(saveDir);
+			FileWriter writer = new FileWriter(SAVE_FILE);
 			writer.write(data);
 			writer.close();
 		} catch (IOException e) {
@@ -515,12 +518,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			return;
 		}
 
-		// Start by resetting our world
-		this.resetWorld();
-
 		Gson gson = new Gson();
 		try {
-			String raw = new String(Files.readAllBytes(saveDir.toPath()));
+			String raw = new String(Files.readAllBytes(Paths.get(SAVE_FILE)));
 			PersistentData data = gson.fromJson(raw, PersistentData.class);
 			data.load(this);
 			GameData.mainMenuState = false;

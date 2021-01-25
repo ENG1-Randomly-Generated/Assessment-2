@@ -34,9 +34,7 @@ public class PauseUI extends UI {
             public void onClick() {
                 game.save();
                 GameData.pauseState = false;
-                GameData.gamePlayState = false;
-                GameData.mainMenuState = true;
-                GameData.currentUI = new MenuUI(game);
+                GameData.resetGameState = true;
             }
         });
         this.addButton(saveButton);
