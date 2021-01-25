@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
 
-	private static final String SAVE_DIR = "/saves/";
+	private static final String SAVE_DIR = System.getProperty("user.dir") + "/saves/";
 
 	public Player player;
 	public AI[] opponents = new AI[3];
