@@ -18,7 +18,7 @@ public class PauseUI extends UI {
         scrollingBackground.setSpeedFixed(true);
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
 
-        UI.Button continueButton = new UI.Button(new Texture("ContinueUnselected.png"), new Texture("ContinueSelected.png"), 0.5f, 0.75f, 0.4f, 0.15f, new ButtonListener() {
+        UI.Button continueButton = new UI.Button(new Texture("ContinueUnselected.png"), new Texture("ContinueSelected.png"), 0.5f, 0.75f, 0.4f, 0.2f, new ButtonListener() {
             @Override
             public void onClick() {
                 // Go back to game
@@ -29,7 +29,7 @@ public class PauseUI extends UI {
         });
         this.addButton(continueButton);
 
-        UI.Button saveButton = new UI.Button(new Texture("SaveUnselected.png"), new Texture("SaveSelected.png"), 0.5f, 0.5f, 0.4f, 0.15f, new ButtonListener() {
+        UI.Button saveButton = new UI.Button(new Texture("SaveUnselected.png"), new Texture("SaveSelected.png"), 0.5f, 0.5f, 0.4f, 0.2f, new ButtonListener() {
             @Override
             public void onClick() {
                 game.save();
@@ -38,6 +38,14 @@ public class PauseUI extends UI {
             }
         });
         this.addButton(saveButton);
+
+        UI.Button exit = new UI.Button(new Texture("ExitUnselected.png"), new Texture("ExitSelected.png"), 0.5f, 0.18f, 0.3f, 0.15f, new ButtonListener() {
+            @Override
+            public void onClick() {
+                Gdx.app.exit();
+            }
+        });
+        this.addButton(exit);
     }
 
     @Override
