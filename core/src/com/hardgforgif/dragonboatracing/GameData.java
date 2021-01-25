@@ -12,6 +12,7 @@ public class GameData {
     // Create the game state variables
     public static boolean mainMenuState = true;
     public static boolean choosingBoatState = false;
+    public static boolean choosingDifficultyState = false;
     public static boolean gamePlayState = false;
     public static boolean showResultsState = false;
     public static boolean resetGameState = false;
@@ -50,5 +51,5 @@ public class GameData {
     public static float currentTimer = 0f;
 
     // Difficulty constants for the AI
-    public static float[] difficulty = new float[]{0.92f, 0.97f, 1f};
+    public static float[] difficulty = new float[]{1f, 1f, 1f, 1f, 1f};
 }

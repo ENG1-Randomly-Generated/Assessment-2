@@ -259,7 +259,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// If the game is in one of the static state
-		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState || GameData.pauseState) {
+		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState || GameData.choosingDifficultyState || GameData.pauseState) {
 			// Draw the UI and wait for the input
 
 			GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());

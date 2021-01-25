@@ -145,14 +145,11 @@ public class ChoosingUI extends UI{
                 GameData.boatTypes[2] = intList.get(1);
                 GameData.boatTypes[3] = intList.get(2);
 
-                // Change the music
-                GameData.music.stop();
-                GameData.music = Gdx.audio.newMusic(Gdx.files.internal("Love_Drama.ogg"));
 
-                // Set the game state to the game play state
+                // Set the game state to the choose difficulty state
                 GameData.choosingBoatState = false;
-                GameData.gamePlayState = true;
-                GameData.currentUI = new GamePlayUI();
+                GameData.choosingDifficultyState = true;
+                GameData.currentUI = new ChoosingDifficultyUI();
             }
         }
 
