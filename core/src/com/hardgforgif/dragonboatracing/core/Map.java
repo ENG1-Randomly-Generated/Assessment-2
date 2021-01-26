@@ -129,7 +129,7 @@ public class Map {
             lanes[i] = new Lane(mapHeight, layers[i], layers[i+1]);
             lanes[i].constructBoundries(this.unitScale);
             lanes[i].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
-            lanes[i].spawnPowerups(world, mapHeight / GameData.PIXELS_TO_TILES, 5);
+            lanes[i].spawnPowerups(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
         }
 
     }

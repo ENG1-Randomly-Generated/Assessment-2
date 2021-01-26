@@ -21,6 +21,11 @@ public class Boat {
     public float speed;
     public float acceleration;
 
+    // CHANGED: Meta fields used for powerups, these hold constants for the actual stats of the boat
+    public final float _speed;
+    public final float _maneuverability;
+    public final float _acceleration;
+
     public float current_speed = 20f;
     public float turningSpeed = 0.25f;
     public float targetAngle = 0f;
@@ -45,6 +50,11 @@ public class Boat {
         this.acceleration = acceleration;
         this.maneuverability = maneuverability;
         turningSpeed *= this.maneuverability / 100;
+
+        // CHANGED: Adding meta fields definitions
+        this._speed = speed;
+        this._acceleration = acceleration;
+        this._maneuverability = maneuverability;
 
 
         boatTexture = new Texture("Boat" + (boatType + 1) + ".png");

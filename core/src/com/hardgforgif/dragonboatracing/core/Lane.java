@@ -6,8 +6,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.hardgforgif.dragonboatracing.GameData;
-import com.hardgforgif.dragonboatracing.powerups.HealthPowerup;
-import com.hardgforgif.dragonboatracing.powerups.Powerup;
+import com.hardgforgif.dragonboatracing.powerups.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -93,12 +92,27 @@ public class Lane {
     public void spawnPowerups(World world, float mapHeight, int n) {
         float segmentLength = mapHeight / n;
         for (int i = 0; i < n; i++){
-            int randomPowerup = this.random.nextInt(1);
+            int randomPowerup = this.random.nextInt(5);
             float scale = 0f;
 
             Powerup powerup;
 
             switch (randomPowerup) {
+                case 0:
+                    powerup = new HealthPowerup();
+                    break;
+                case 1:
+                    powerup = new SpeedPowerup();
+                    break;
+                case 2:
+                    powerup = new ManeuverabilityPowerup();
+                    break;
+                case 3:
+                    powerup = new AccelerationPowerup();
+                    break;
+                case 4:
+                    powerup = new SprintPowerup();
+                    break;
                 default:
                     powerup = new HealthPowerup();
                     break;

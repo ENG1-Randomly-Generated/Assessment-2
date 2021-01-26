@@ -115,10 +115,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				Object bObj = fixtureB.getBody().getUserData();
 
 				if (aObj instanceof Obstacle || aObj instanceof Powerup) {
-					System.out.println(aObj.toString());
 					toBeRemovedBodies.add(fixtureA.getBody());
 				} else if (bObj instanceof Obstacle || bObj instanceof Powerup) {
-					System.out.println(bObj.toString());
 					toBeRemovedBodies.add(fixtureB.getBody());
 				}
 
@@ -130,8 +128,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 				if (aObj instanceof Powerup && bObj instanceof Boat) {
 					((Powerup) aObj).onCollide((Boat)bObj);
+					((Powerup) aObj).used = true;
 				} else if (bObj instanceof Powerup && aObj instanceof Boat) {
 					((Powerup) bObj).onCollide((Boat)aObj);
+					((Powerup) bObj).used = true;
 				}
 			}
 
@@ -318,7 +318,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				for (Lane lane : map[GameData.currentLeg].lanes) {
 					// CHANGED: Now let's just remove the Obstacle object all-together, as it's not actually needed anymore
 					lane.obstacles.removeIf(obstacle -> (obstacle.obstacleBody == body));
-					lane.powerups.removeIf(powerup -> (powerup.body == body));
 				}
 
 				// Remove the body from the world to avoid other collisions with it
@@ -396,10 +395,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					obstacle.drawObstacle(batch);
 				}
 
-			// Render powerups
+			// Render powerups that aren't used
 			for (Lane lane : map[GameData.currentLeg].lanes) {
 				for (Powerup powerup : lane.powerups) {
-					powerup.draw(batch);
+					if (!powerup.used) {
+						powerup.draw(batch);
+					}
+					powerup.tick();
 				}
 			}
 

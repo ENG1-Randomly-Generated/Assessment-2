@@ -14,6 +14,11 @@ import com.hardgforgif.dragonboatracing.core.Boat;
 
 public abstract class Powerup {
 
+    protected interface TempPowerup {
+        void onStart();
+        void onEnd();
+    }
+
     private final String PATH_PREFIX = "Powerups/";
 
     private final Texture texture;
@@ -22,11 +27,16 @@ public abstract class Powerup {
     public Sprite sprite;
     public float scale;
     public Body body;
+    public boolean used;
+
+    private TempPowerup tempPowerup;
+    private long endTime;
 
 
     public Powerup(Texture texture, String typeName) {
         this.texture = texture;
         this.typeName = typeName;
+        this.used = false;
     }
 
     /**
@@ -35,6 +45,21 @@ public abstract class Powerup {
      * @param boat Boat collided with
      */
     public abstract void onCollide(Boat boat);
+
+
+    /**
+     * Register a temporary powerup for the given amount of time
+     *  The tp.onStart() will be run, and after time milliseconds, the tp.onEnd() will be run
+     * @param tp TempPowerup definition
+     * @param time Time in milliseconds before start and end
+     */
+    public void registerTempPowerup(TempPowerup tp, long time) {
+        this.endTime = System.currentTimeMillis() + time;
+        this.tempPowerup = tp;
+        tp.onStart();
+    }
+
+
 
     /**
      * Creates a body for the powerup
@@ -75,6 +100,7 @@ public abstract class Powerup {
      * @param batch Batch to draw on
      */
     public void draw(Batch batch){
+
         sprite.setPosition((body.getPosition().x * GameData.METERS_TO_PIXELS) - sprite.getWidth() / 2,
                 (body.getPosition().y * GameData.METERS_TO_PIXELS) - sprite.getHeight() / 2);
         batch.begin();
@@ -83,6 +109,17 @@ public abstract class Powerup {
                 sprite.getWidth(), sprite.getHeight(), sprite.getScaleX(),
                 sprite.getScaleY(), sprite.getRotation());
         batch.end();
+    }
+
+    /**
+     * Run every tick of the game, whether visible or not
+     */
+    public void tick() {
+        // If we have a tempPowerup, check it and complete if needed
+        if (tempPowerup != null && endTime < System.currentTimeMillis()) {
+            tempPowerup.onEnd();
+            tempPowerup = null;
+        }
     }
 
 
