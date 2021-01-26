@@ -14,11 +14,17 @@ import com.hardgforgif.dragonboatracing.BodyEditorLoader;
 
 public class Boat {
     // Boat specs
+    public float max_robustness; // CHANGED: Adding max_robustness so that we have a reference for powerups etc
     public float robustness;
     public float stamina = 120f;
     public float maneuverability;
     public float speed;
     public float acceleration;
+
+    // CHANGED: Meta fields used for powerups, these hold constants for the actual stats of the boat
+    public final float _speed;
+    public final float _maneuverability;
+    public final float _acceleration;
 
     public float current_speed = 20f;
     public float turningSpeed = 0.25f;
@@ -39,10 +45,16 @@ public class Boat {
 
     public Boat(float robustness, float speed, float acceleration, float maneuverability, int boatType, Lane lane) {
         this.robustness = robustness;
+        this.max_robustness = robustness;
         this.speed = speed;
         this.acceleration = acceleration;
         this.maneuverability = maneuverability;
         turningSpeed *= this.maneuverability / 100;
+
+        // CHANGED: Adding meta fields definitions
+        this._speed = speed;
+        this._acceleration = acceleration;
+        this._maneuverability = maneuverability;
 
 
         boatTexture = new Texture("Boat" + (boatType + 1) + ".png");

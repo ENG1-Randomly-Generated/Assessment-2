@@ -15,6 +15,8 @@ import com.hardgforgif.dragonboatracing.UI.PauseUI;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.*;
 import com.hardgforgif.dragonboatracing.persistence.PersistentData;
+import com.hardgforgif.dragonboatracing.powerups.HealthPowerup;
+import com.hardgforgif.dragonboatracing.powerups.Powerup;
 
 import java.awt.*;
 import java.io.File;
@@ -107,16 +109,29 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			public void beginContact(Contact contact) {
 				Fixture fixtureA = contact.getFixtureA();
 				Fixture fixtureB = contact.getFixtureB();
-				if (fixtureA.getBody().getUserData() instanceof Obstacle) {
+
+				// CHANGED: Adding extra contact listeners for powerups, but also reducing code redundencies here
+				Object aObj = fixtureA.getBody().getUserData();
+				Object bObj = fixtureB.getBody().getUserData();
+
+				if (aObj instanceof Obstacle || aObj instanceof Powerup) {
 					toBeRemovedBodies.add(fixtureA.getBody());
-				} else if (fixtureB.getBody().getUserData() instanceof Obstacle) {
+				} else if (bObj instanceof Obstacle || bObj instanceof Powerup) {
 					toBeRemovedBodies.add(fixtureB.getBody());
 				}
 
-				if (fixtureA.getBody().getUserData() instanceof Boat) {
-					toUpdateHealth.add(fixtureA.getBody());
-				} else if (fixtureB.getBody().getUserData() instanceof Boat) {
+				if (aObj instanceof Obstacle && bObj instanceof Boat) {
 					toUpdateHealth.add(fixtureB.getBody());
+				} else if (bObj instanceof Obstacle && aObj instanceof Boat) {
+					toUpdateHealth.add(fixtureA.getBody());
+				}
+
+				if (aObj instanceof Powerup && bObj instanceof Boat) {
+					((Powerup) aObj).onCollide((Boat)bObj);
+					((Powerup) aObj).used = true;
+				} else if (bObj instanceof Powerup && aObj instanceof Boat) {
+					((Powerup) bObj).onCollide((Boat)aObj);
+					((Powerup) bObj).used = true;
 				}
 			}
 
@@ -300,9 +315,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			for (Body body : toBeRemovedBodies){
 				// Find the obstacle that has this body and mark it as null
 				// so it's sprite doesn't get rendered in future frames
-				for (Lane lane : map[GameData.currentLeg].lanes)
+				for (Lane lane : map[GameData.currentLeg].lanes) {
 					// CHANGED: Now let's just remove the Obstacle object all-together, as it's not actually needed anymore
 					lane.obstacles.removeIf(obstacle -> (obstacle.obstacleBody == body));
+				}
 
 				// Remove the body from the world to avoid other collisions with it
 				world[GameData.currentLeg].destroyBody(body);
@@ -376,9 +392,18 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			// Render the objects that weren't destroyed yet
 			for (Lane lane : map[GameData.currentLeg].lanes)
 				for (Obstacle obstacle : lane.obstacles){
-					if (obstacle.obstacleBody != null)
-						obstacle.drawObstacle(batch);
+					obstacle.drawObstacle(batch);
 				}
+
+			// Render powerups that aren't used
+			for (Lane lane : map[GameData.currentLeg].lanes) {
+				for (Powerup powerup : lane.powerups) {
+					if (!powerup.used) {
+						powerup.draw(batch);
+					}
+					powerup.tick();
+				}
+			}
 
 			// Update the camera at the player's position
 			updateCamera(player);

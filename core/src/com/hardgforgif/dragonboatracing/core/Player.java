@@ -27,6 +27,8 @@ public class Player extends Boat{
         // Move the boat
         moveBoat();
 
+        System.out.println(this.current_speed);
+
         // Update the sprite location to match the body
         boatSprite.setRotation((float)Math.toDegrees(boatBody.getAngle()));
         boatSprite.setPosition((boatBody.getPosition().x * GameData.METERS_TO_PIXELS) - boatSprite.getWidth() / 2,

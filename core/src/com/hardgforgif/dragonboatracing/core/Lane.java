@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.hardgforgif.dragonboatracing.GameData;
+import com.hardgforgif.dragonboatracing.powerups.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,6 +22,10 @@ public class Lane {
                                           // It is much easier if we have the lane's obstacles ACTUALLY reflect the obstacles, rather than some redundant
                                           // dead ones
 
+    public ArrayList<Powerup> powerups; // CHANGED: Added powerups for each lane
+
+    private Random random; // CHANGED: Making a Random object field instead of using one-off instatiations for efficiency reasons
+
     public Lane(int mapHeight, MapLayer left, MapLayer right){
         leftBoundry = new float[mapHeight][2];
         rightBoundry = new float[mapHeight][2];
@@ -29,6 +34,8 @@ public class Lane {
         rightLayer = right;
 
         this.obstacles = new ArrayList<Obstacle>();
+        this.powerups = new ArrayList<Powerup>();
+        this.random = new Random();
     }
 
     /**
@@ -74,6 +81,56 @@ public class Lane {
         }
         lst[1] = rightBoundry[i - 1][1];
         return lst;
+    }
+
+    /**
+     * Spawn powerups on the lane
+     * @param world World to spawn powerups in
+     * @param mapHeight Height of the map to draw on
+     * @param n Number of powerups to create on this lane
+     */
+    public void spawnPowerups(World world, float mapHeight, int n) {
+        float segmentLength = mapHeight / n;
+        for (int i = 0; i < n; i++){
+            int randomPowerup = this.random.nextInt(5);
+            float scale = 0f;
+
+            Powerup powerup;
+
+            switch (randomPowerup) {
+                case 0:
+                    powerup = new HealthPowerup();
+                    break;
+                case 1:
+                    powerup = new SpeedPowerup();
+                    break;
+                case 2:
+                    powerup = new ManeuverabilityPowerup();
+                    break;
+                case 3:
+                    powerup = new AccelerationPowerup();
+                    break;
+                case 4:
+                    powerup = new SprintPowerup();
+                    break;
+                default:
+                    powerup = new HealthPowerup();
+                    break;
+            }
+
+            float segmentStart = i * segmentLength;
+            float yPos = (float) (600f + (segmentStart + Math.random() * segmentLength));
+
+            float[] limits = this.getLimitsAt(yPos);
+            float leftLimit = limits[0] + 50;
+            float rightLimit = limits[1];
+            float xPos = (float) (leftLimit + Math.random() * (rightLimit - leftLimit));
+
+
+            powerup.createObstacleBody(world, xPos / GameData.METERS_TO_PIXELS, yPos / GameData.METERS_TO_PIXELS, scale);
+
+            this.powerups.add(powerup);
+        }
     }
 
     /**
