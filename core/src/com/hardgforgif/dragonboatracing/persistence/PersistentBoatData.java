@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.hardgforgif.dragonboatracing.Game;
 import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.core.*;
+import com.hardgforgif.dragonboatracing.powerups.Powerup;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class PersistentBoatData {
     public int laneNumber;
 
     public PersistentObstacleData[] obstacles;
+    public PersistentPowerupData[] powerups;
 
 
     public PersistentBoatData(Boat boat, int laneNumber) {
@@ -42,6 +44,12 @@ public class PersistentBoatData {
         for (int i = 0; i < boat.lane.obstacles.size(); i++) {
             this.obstacles[i] = new PersistentObstacleData(boat.lane.obstacles.get(i));
         }
+
+        // Get powerups in this boat's lane
+        this.powerups = new PersistentPowerupData[boat.lane.powerups.size()];
+        for (int i = 0; i < boat.lane.powerups.size(); i++) {
+            this.powerups[i] = new PersistentPowerupData(boat.lane.powerups.get(i));
+        }
     }
 
     private void loadObstacles(Game game, Lane lane) {
@@ -54,6 +62,19 @@ public class PersistentBoatData {
         // Now add our new obstacles
         for (int i = 0; i < this.obstacles.length; i++) {
             lane.obstacles.add(this.obstacles[i].toObstacle(game));
+        }
+    }
+
+    private void loadPowerups(Game game, Lane lane) {
+        // Start by removing all current powerups
+        for (Powerup powerup : lane.powerups) {
+            game.world[GameData.currentLeg].destroyBody(powerup.body);
+        }
+        lane.powerups.clear();
+
+        // Now add our saved powerups
+        for (int i = 0; i < this.powerups.length; i++) {
+            lane.powerups.add(this.powerups[i].toPowerup(game));
         }
     }
 
@@ -70,6 +91,7 @@ public class PersistentBoatData {
         boat.targetAngle = this.targetAngle;
 
         this.loadObstacles(game, lane);
+        this.loadPowerups(game, lane);
 
         return boat;
     }
