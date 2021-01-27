@@ -16,6 +16,7 @@ public class PersistentGameData {
     public List<Float[]> results = new ArrayList<>();
     public int currentLeg = 0;
     public float currentTimer = 0f;
+    public float[] difficulty;
 
     public PersistentGameData() {
         this.boatTypes = GameData.boatTypes;
@@ -24,6 +25,7 @@ public class PersistentGameData {
         this.results = GameData.results;
         this.currentLeg = GameData.currentLeg;
         this.currentTimer = GameData.currentTimer;
+        this.difficulty = GameData.difficulty;
     }
 
     public void loadGameData() {
@@ -33,6 +35,7 @@ public class PersistentGameData {
         GameData.results = this.results;
         GameData.currentLeg = this.currentLeg;
         GameData.currentTimer = this.currentTimer;
+        GameData.difficulty = this.difficulty;
     }
 
 }
