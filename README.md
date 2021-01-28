@@ -46,3 +46,7 @@ Then select the new configuration, and you will be able to run it.
 Love Drama (Race Music) Music by <a href="/users/lymzpodcast-18852086/?tab=audio&amp;utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=audio&amp;utm_content=1333">lymzpodcast</a> from <a href="https://pixabay.com/music/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=1333">Pixabay</a>
 
 Wataboi - Vibin (Menu Music) Music by <a href="/users/wataboi-12344345/?tab=audio&amp;utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=audio&amp;utm_content=1168">Wataboi</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=1168">Pixabay</a>
+
+## Credits
+
+``com.randomlygenerated.tests.GdxTestRunner`` is licensed under the Apache-2 License, the original repository can be found [here](https://github.com/TomGrill/gdx-testing). The original license remains commented at the top, and the source remains unchanged.
