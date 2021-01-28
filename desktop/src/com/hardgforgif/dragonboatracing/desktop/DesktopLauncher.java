@@ -7,15 +7,6 @@ import com.hardgforgif.dragonboatracing.Game;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-
-		Vector2 vector = new Vector2(1,2);
-		Vector2 test = vector;
-		test.set(5, 1);
-		System.out.println(vector);
-		System.out.println(test);
-		System.out.println(vector.equals(test));
-
-		if (true) return;
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1280;
 		config.height = 720;
