@@ -5,6 +5,7 @@ import com.hardgforgif.dragonboatracing.core.Boat;
 
 public class SprintPowerup extends Powerup {
 
+    public static final int LENGTH = 500; // Time the powerup lasts for
 
     public SprintPowerup() {
         super(new Texture("Powerups/sprint.png"), "sprint");
@@ -22,7 +23,8 @@ public class SprintPowerup extends Powerup {
             @Override
             public void onEnd() {
                 boat.speed = boat._speed;
+                boat.current_speed = Math.min(boat._speed, boat.current_speed);
             }
-        }, 500);
+        }, LENGTH);
     }
 }

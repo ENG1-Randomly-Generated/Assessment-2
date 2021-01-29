@@ -19,6 +19,10 @@ import static org.mockito.Mockito.mock;
  */
 public class Utility {
 
+    public interface TickCommand {
+        void tick();
+    }
+
     /**
      * Reset GameData almost entirely for testing
      */
@@ -37,6 +41,29 @@ public class Utility {
         GameData.currentTimer = 0f;
         GameData.standings = new int[4];
     }
+
+    /**
+     * Mock the ticking of an Entity or class for the
+     *  purpose of testing
+     *
+     * @param command - TickCommand interface with given command to run every tick
+     * @param time - Time in milliseconds to run mockticks for
+     */
+    public static void mockTicks(TickCommand command, long time) {
+        new Thread(new Runnable() {
+            long endTime = System.currentTimeMillis() + time;
+            @Override
+            public void run() {
+                while (System.currentTimeMillis() < endTime) {
+                    command.tick();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ignored) {}
+                }
+            }
+        }).start();
+    }
+
 
     public static World getMockWorld() {
         return new World(new Vector2(0,0), true);

@@ -5,6 +5,7 @@ import com.hardgforgif.dragonboatracing.core.Boat;
 
 public class ManeuverabilityPowerup extends Powerup {
 
+    public static final int LENGTH = 6000; // Time the powerup lasts for
 
     public ManeuverabilityPowerup() {
         super(new Texture("Powerups/maneuv.png"), "maneuv");
@@ -22,6 +23,6 @@ public class ManeuverabilityPowerup extends Powerup {
             public void onEnd() {
                 boat.maneuverability = boat._maneuverability;
             }
-        }, 6000);
+        }, LENGTH);
     }
 }
