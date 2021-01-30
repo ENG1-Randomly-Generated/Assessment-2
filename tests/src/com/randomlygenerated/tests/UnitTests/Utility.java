@@ -64,6 +64,29 @@ public class Utility {
         }).start();
     }
 
+    public static Game getMockGame(boolean createBodies) {
+        Game game = new Game();
+        game.map = new Map[] {getMockMap()};
+        game.player = getMockPlayer(game.map[0].lanes[0]);
+        game.world = new World[] {getMockWorld()};
+        game.opponents = new AI[] {getMockAI(game.map[0].lanes[1]), getMockAI(game.map[0].lanes[2]),
+                getMockAI(game.map[0].lanes[3])};
+
+        if (createBodies) {
+            game.player.createBoatBody(game.world[0], 0, 0, "Boat1.json");
+            game.opponents[0].createBoatBody(game.world[0], 0, 0, "Boat1.json");
+            game.opponents[1].createBoatBody(game.world[0], 0, 0, "Boat1.json");
+            game.opponents[2].createBoatBody(game.world[0], 0, 0, "Boat1.json");
+        }
+
+        return game;
+    }
+
+    public static Map getMockMap() {
+        Map map = mock(Map.class);
+        map.lanes = new Lane[] {getMockLane(), getMockLane(), getMockLane(), getMockLane()};
+        return map;
+    }
 
     public static World getMockWorld() {
         return new World(new Vector2(0,0), true);
@@ -73,16 +96,16 @@ public class Utility {
         return new Lane(9000, mock(MapLayer.class), mock(MapLayer.class));
     }
 
-    public static Boat getMockBoat() {
-        return new Boat(100, 100, 100, 100, 1, getMockLane());
+    public static AI getMockAI(Lane lane) {
+        return new AI(100, 100, 100, 100, 1, lane);
     }
 
-    public static Player getMockPlayer() {
-        return new Player(100, 100, 100, 100, 1, getMockLane());
+    public static AI getMockAI() {
+        return getMockAI(getMockLane());
     }
 
-    public static Boat getMockBoat(int robustness, int speed, int acceleration, int maneuverability) {
-        return new Boat(robustness, speed, acceleration, maneuverability, 1, mock(Lane.class));
-    }
+    public static Player getMockPlayer(Lane lane) { return new Player(100, 100, 100, 100, 1, lane); }
+
+    public static Player getMockPlayer() { return getMockPlayer(getMockLane()); }
 
 }

@@ -2,6 +2,7 @@ package com.randomlygenerated.tests.UnitTests;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.hardgforgif.dragonboatracing.Game;
 import com.hardgforgif.dragonboatracing.core.Player;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class BoatTest {
 
     /**
      *  BOAT_STAMINA
-     *      Does the boat move upon being given an input?
+     *      Does the boat lose stamina upon moving?
      */
     @Test
     public void BOAT_STAMINA() {
