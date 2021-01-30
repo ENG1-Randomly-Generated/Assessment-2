@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.randomlygenerated.tests;
+package com.randomlygenerated.tests.UnitTests;
 
 import java.util.HashMap;
 import java.util.Map;

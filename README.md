@@ -19,6 +19,11 @@ The latest and greatest racing game!
 1. Open terminal in root directory
 2. Run ``gradlew tests:test``
 
+## Integrated testing
+1. Add new running configuration in IDE
+2. Set main class to ``com.randomlygenerated.tests.IntegratedTesting``
+3. Run and perform testing as preferred
+
 ## Dependencies
 
 * openjdk 8
@@ -49,4 +54,4 @@ Wataboi - Vibin (Menu Music) Music by <a href="/users/wataboi-12344345/?tab=audi
 
 ## Credits
 
-``com.randomlygenerated.tests.GdxTestRunner`` is licensed under the Apache-2 License, the original repository can be found [here](https://github.com/TomGrill/gdx-testing). The original license remains commented at the top, and the source remains unchanged.
+``com.randomlygenerated.tests.UnitTests.GdxTestRunner`` is licensed under the Apache-2 License, the original repository can be found [here](https://github.com/TomGrill/gdx-testing). The original license remains commented at the top, and the source remains unchanged.

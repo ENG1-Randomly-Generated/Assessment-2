@@ -1,4 +1,4 @@
-package com.randomlygenerated.tests;
+package com.randomlygenerated.tests.UnitTests;
 
 
 import com.badlogic.gdx.graphics.OrthographicCamera;

@@ -1,19 +1,12 @@
-package com.randomlygenerated.tests;
+package com.randomlygenerated.tests.UnitTests;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.hardgforgif.dragonboatracing.Game;
-import com.hardgforgif.dragonboatracing.GameData;
-import com.hardgforgif.dragonboatracing.core.Boat;
-import com.hardgforgif.dragonboatracing.core.Lane;
 import com.hardgforgif.dragonboatracing.core.Player;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.randomlygenerated.tests.Utility.*;
+import static com.randomlygenerated.tests.UnitTests.Utility.*;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;

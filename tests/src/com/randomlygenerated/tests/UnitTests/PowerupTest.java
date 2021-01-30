@@ -1,12 +1,12 @@
-package com.randomlygenerated.tests;
+package com.randomlygenerated.tests.UnitTests;
 
 import com.hardgforgif.dragonboatracing.core.Player;
 import com.hardgforgif.dragonboatracing.powerups.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.randomlygenerated.tests.Utility.getMockPlayer;
-import static com.randomlygenerated.tests.Utility.mockTicks;
+import static com.randomlygenerated.tests.UnitTests.Utility.getMockPlayer;
+import static com.randomlygenerated.tests.UnitTests.Utility.mockTicks;
 import static junit.framework.TestCase.assertTrue;
 
 /**
