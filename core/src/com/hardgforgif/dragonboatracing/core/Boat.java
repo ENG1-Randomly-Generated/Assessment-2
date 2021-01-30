@@ -73,7 +73,7 @@ public class Boat {
      * @param posY y location of the body, in meters
      * @param bodyFile the name of the box2D editor json file for the body fixture
      */
-    public void createBoatBody(World world, float posX, float posY, String bodyFile){
+    public void createBoatBody(World world, float posX, float posY, String bodyFile) {
         boatSprite = new Sprite(boatTexture);
         boatSprite.scale(-0.8f);
 
@@ -105,7 +105,7 @@ public class Boat {
      * Draws the boat on the batch, with animations
      * @param batch The batch to draw on
      */
-    public void drawBoat(Batch batch){
+    public void drawBoat(Batch batch) {
         batch.begin();
         batch.draw((TextureRegion) animation.getKeyFrame(GameData.currentTimer, true), boatSprite.getX(), boatSprite.getY(), boatSprite.getOriginX(),
                 boatSprite.getOriginY(),
@@ -117,7 +117,7 @@ public class Boat {
     /**
      * Updates the boat's limits in the lane based on it's location
      */
-    public void updateLimits(){
+    public void updateLimits() {
         int i;
         for (i = 1; i < lane.leftIterator; i++){
             if (lane.leftBoundry[i][0] > boatSprite.getY() + (boatSprite.getHeight() / 2)) {
@@ -134,7 +134,7 @@ public class Boat {
         rightLimit = lane.rightBoundry[i - 1][1];
     }
 
-    public float[] getLimitsAt(float yPosition){
+    public float[] getLimitsAt(float yPosition) {
         float[] lst = new float[2];
         int i;
         for (i = 1; i < lane.leftIterator; i++){
@@ -157,14 +157,14 @@ public class Boat {
      * Checks if the boat finished the race
      * @return True if the boat passed the finish line, false otherwise
      */
-    public boolean hasFinished(){
+    public boolean hasFinished() {
         if (boatSprite.getY() + boatSprite.getHeight() / 2 > 9000f)
             return true;
         return false;
     }
 
     /**
-     * Moves the boat forward, based i=on it's rotation
+     * Moves the boat forward, based on it's rotation
      */
     public void moveBoat(){
         current_speed += 0.15f * (acceleration/90)  * (stamina/100);
@@ -223,7 +223,7 @@ public class Boat {
      * Rotate the boat until it reaches the given angle, based on it's turning speed and stamina
      * @param angle angle to rotate to
      */
-    public void rotateBoat(float angle){
+    public void rotateBoat(float angle) {
         // Calculate the difference between the target angle and the current rotation of the boat
         float angleDifference = angle - boatBody.getAngle() * MathUtils.radDeg;
 

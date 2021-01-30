@@ -5,6 +5,8 @@ import com.hardgforgif.dragonboatracing.core.Boat;
 
 public class SpeedPowerup extends Powerup {
 
+    public static final int LENGTH = 6000; // Time the powerup lasts for
+
 
     public SpeedPowerup() {
         super(new Texture("Powerups/speedup.png"), "speedup");
@@ -22,6 +24,6 @@ public class SpeedPowerup extends Powerup {
             public void onEnd() {
                 boat.speed = boat._speed;
             }
-        }, 6000);
+        }, LENGTH);
     }
 }
