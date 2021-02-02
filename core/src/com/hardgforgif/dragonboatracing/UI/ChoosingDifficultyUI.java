@@ -19,17 +19,8 @@ public class ChoosingDifficultyUI extends UI{
     private Sprite easyBG_sprite;
     private Sprite mediumBG_sprite;
     private Sprite hardBG_sprite;
-
-    private Texture bar;
-    private Sprite[] barSprites = new Sprite[4];
-    private Texture boatTexture;
-    private Sprite[] boatSprites = new Sprite[4];
-
     private BitmapFont label;
     private BitmapFont selectedLabel;
-
-    private float[] currentStats = new float[4];
-
     ScrollingBackground scrollingBackground = new ScrollingBackground();
 
 
@@ -64,30 +55,6 @@ public class ChoosingDifficultyUI extends UI{
         selectedLabel = new BitmapFont();
         selectedLabel.getData().setScale(1.4f);
         selectedLabel.setColor(Color.WHITE);
-
-
-        bar = new Texture("Robustness_bar.png");
-        barSprites[0] = new Sprite(bar);
-        barSprites[0].setPosition(430,600);
-
-        bar = new Texture("Speed_bar.png");
-        barSprites[1] = new Sprite(bar);
-        barSprites[1].setPosition(430,550);
-
-        bar = new Texture("Acceleration_bar.png");
-        barSprites[2] = new Sprite(bar);
-        barSprites[2].setPosition(430,500);
-
-        bar = new Texture("Maneuverability_bar.png");
-        barSprites[3] = new Sprite(bar);
-        barSprites[3].setPosition(430,450);
-
-        for (int i = 1; i <= 4; i++){
-            boatTexture = new Texture("Boat" + i + ".png");
-            boatSprites[i - 1] = new Sprite(boatTexture);
-            boatSprites[i - 1].scale(-0.6f);
-            boatSprites[i - 1].setPosition(150 + 300f * (i - 1), -200f);
-        }
     }
 
     @Override
