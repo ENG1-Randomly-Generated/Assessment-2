@@ -354,7 +354,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 							opponents[i].robustness -= 10f;
 							opponents[i].current_speed -= 30f;
 
-							if(opponents[i].robustness < 0&& GameData.results.size() < 4){
+							if(opponents[i].robustness < 0 && GameData.results.size() < 4){
 								world[GameData.currentLeg].destroyBody(opponents[i].boatBody);
 								GameData.results.add(new Float[]{Float.valueOf(i + 1), Float.MAX_VALUE});
 							}

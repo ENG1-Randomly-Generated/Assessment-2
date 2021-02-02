@@ -5,10 +5,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.hardgforgif.dragonboatracing.Game;
 import com.hardgforgif.dragonboatracing.GameData;
+import com.hardgforgif.dragonboatracing.UI.GamePlayUI;
+import com.hardgforgif.dragonboatracing.UI.MenuUI;
 import com.hardgforgif.dragonboatracing.core.*;
+import com.hardgforgif.dragonboatracing.powerups.SprintPowerup;
 
 import java.util.ArrayList;
 
@@ -66,11 +70,17 @@ public class Utility {
 
     public static Game getMockGame(boolean createBodies) {
         Game game = new Game();
-        game.map = new Map[] {getMockMap()};
+        game.map = new Map[] {getMockMap(), getMockMap(), getMockMap()};
         game.player = getMockPlayer(game.map[0].lanes[0]);
-        game.world = new World[] {getMockWorld()};
+        game.world = new World[] {getMockWorld(), getMockWorld(), getMockWorld()};
         game.opponents = new AI[] {getMockAI(game.map[0].lanes[1]), getMockAI(game.map[0].lanes[2]),
                 getMockAI(game.map[0].lanes[3])};
+        game.UIbatch = mock(SpriteBatch.class);
+        game.batch = mock(SpriteBatch.class);
+        game.camera = new OrthographicCamera();
+        resetGameData();
+        GameData.currentUI = new GamePlayUI();
+        GameData.gamePlayState = true;
 
         if (createBodies) {
             game.player.createBoatBody(game.world[0], 0, 0, "Boat1.json");
