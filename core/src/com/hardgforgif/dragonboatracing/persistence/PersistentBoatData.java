@@ -25,7 +25,11 @@ public class PersistentBoatData {
     public PersistentObstacleData[] obstacles;
     public PersistentPowerupData[] powerups;
 
-
+    /**
+     * Generate a persistent boat data for saving to JSON
+     * @param boat Boat to save
+     * @param laneNumber Lane number for this boat
+     */
     public PersistentBoatData(Boat boat, int laneNumber) {
         this.robustness = boat.robustness;
         this.stamina = boat.stamina;
@@ -52,6 +56,11 @@ public class PersistentBoatData {
         }
     }
 
+    /**
+     * Load the saved obstacles into the lane
+     * @param game Game we are loading into
+     * @param lane Lane to place the saved obstacle
+     */
     private void loadObstacles(Game game, Lane lane) {
         // Start by removing all the current obstacles
         for (Obstacle obstacle : lane.obstacles) {
@@ -65,6 +74,11 @@ public class PersistentBoatData {
         }
     }
 
+    /**
+     * Load the saved powerups into the lane
+     * @param game Game we are loading into
+     * @param lane Lane to place saved powerups
+     */
     private void loadPowerups(Game game, Lane lane) {
         // Start by removing all current powerups
         for (Powerup powerup : lane.powerups) {
@@ -78,7 +92,11 @@ public class PersistentBoatData {
         }
     }
 
-
+    /**
+     * Convert this saved boat instance to a Player boat
+     * @param game Game we are loading into
+     * @return Player - Player object of this saved Boat instance
+     */
     public Player toPlayer(Game game) {
         Lane lane = game.map[GameData.currentLeg].lanes[this.laneNumber];
 
@@ -96,6 +114,11 @@ public class PersistentBoatData {
         return boat;
     }
 
+    /**
+     * Convert this saved boat instance to an AI boat
+     * @param game Game we are loading into
+     * @return AI - AI object of this saved Boat instance
+     */
     public AI toAI(Game game) {
         Lane lane = game.map[GameData.currentLeg].lanes[this.laneNumber];
 
