@@ -3,7 +3,9 @@ package com.randomlygenerated.tests.UnitTests;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.hardgforgif.dragonboatracing.Game;
+import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.core.Player;
+import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
