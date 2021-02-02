@@ -3,6 +3,8 @@ package com.hardgforgif.dragonboatracing.UI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.core.Player;
@@ -61,6 +63,12 @@ public abstract class UI {
         this.buttons.add(button);
     }
 
+    /**
+     * Draw registered buttons onto UI
+     *      This should be called in drawUI() if you have buttons registered
+     * @param batch Batch to draw with
+     * @param mousePos Vector2 position of mouse
+     */
     public void drawButtons(Batch batch, Vector2 mousePos) {
         // Hopefully this will be called within class specific batch.begin() and batch.end(), but start it incase
         boolean wasDrawing = true;
@@ -83,6 +91,20 @@ public abstract class UI {
         if (!wasDrawing) {
             batch.end();
         }
+    }
+
+    /**
+     * Returns a GlyphLayout for the given font and text
+     *  This allows us to retrieve information such as width and height
+     *  Render this with a batch and font with font.draw(batch, glyph)
+     *
+     *  DO NOT run this in the render() thread, keep the object as an attribute
+     * @param font Font to be used to render text
+     * @param text Text to be rendered
+     * @return Glyphlayout to be stored
+     */
+    protected GlyphLayout registerText(BitmapFont font, String text) {
+        return new GlyphLayout(font, text);
     }
 
     /**

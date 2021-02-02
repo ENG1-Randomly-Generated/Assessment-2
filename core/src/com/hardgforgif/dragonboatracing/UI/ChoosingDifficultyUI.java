@@ -156,17 +156,12 @@ public class ChoosingDifficultyUI extends UI{
                 else if (i == 1){
                     GameData.difficulty = new float[]{1f, 1f, 1f, 1f, 1f};
                 }
-                else{
+                else {
                     GameData.difficulty = new float[]{1f, 1.1f, 1.1f, 1f, 1.05f};
                 }
-                // Change the music
-                GameData.music.stop();
-                GameData.music = Gdx.audio.newMusic(Gdx.files.internal("Love_Drama.ogg"));
 
-                // Set the game state to the game play state
-                GameData.choosingDifficultyState = false;
-                GameData.gamePlayState = true;
-                GameData.currentUI = new GamePlayUI();
+                // Change to Controls UI
+                GameData.currentUI = new ControlsUI();
             }
         }
     }
