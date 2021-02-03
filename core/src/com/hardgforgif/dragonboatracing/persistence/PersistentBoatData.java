@@ -108,7 +108,7 @@ public class PersistentBoatData {
         boat.targetAngle = this.targetAngle;
 
         this.loadObstacles(game, lane);
-
+        this.loadPowerups(game, lane);
         return boat;
     }
 
