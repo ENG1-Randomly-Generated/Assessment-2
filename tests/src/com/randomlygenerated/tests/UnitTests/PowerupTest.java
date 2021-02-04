@@ -46,11 +46,11 @@ public class PowerupTest {
     }
 
     /**
-     * POWERUP_SPEED_INCREASE
-     *      A speed powerup will increase the Boat's speed
+     * POWERUP_SPEED_INCREASE_TEMP
+     *      A speed powerup will increase the Boat's speed temporarily
      */
     @Test
-    public void POWERUP_SPEED_INCREASE() {
+    public void POWERUP_SPEED_INCREASE_TEMP() throws InterruptedException {
         Player player = getMockPlayer();
         SpeedPowerup powerup = new SpeedPowerup();
 
@@ -59,21 +59,6 @@ public class PowerupTest {
         powerup.onCollide(player);
 
         assertTrue(player.speed + " is not greater than previous speed " + player._speed, player.speed > player._speed);
-    }
-
-    /**
-     * POWERUP_SPEED_REDUCE
-     *      Once a speed powerup has been applied and runs out, speed must
-     *          reduce back to normal
-     */
-    @Test
-    public void POWERUP_SPEED_REDUCE() throws InterruptedException {
-        Player player = getMockPlayer();
-        SpeedPowerup powerup = new SpeedPowerup();
-
-        player.speed = player._speed; // Set to max speed
-
-        powerup.onCollide(player); // Start the temporary boost
 
         mockTicks(powerup::tick, SpeedPowerup.LENGTH + 1000); // Mock ticks in the background
 
@@ -83,12 +68,13 @@ public class PowerupTest {
                 player.speed <= player._speed);
     }
 
+
     /**
-     * POWERUP_MANEUV_INCREASE
-     *      A maneuverability powerup will increase the Boat's maneuverability
+     * POWERUP_MANEUV_INCREASE_TEMP
+     *      A maneuverability powerup will increase the Boat's maneuverability temporarily
      */
     @Test
-    public void POWERUP_MANEUV_INCREASE() {
+    public void POWERUP_MANEUV_INCREASE_TEMP() throws InterruptedException {
         Player player = getMockPlayer();
         ManeuverabilityPowerup powerup = new ManeuverabilityPowerup();
 
@@ -98,21 +84,6 @@ public class PowerupTest {
 
         assertTrue(player.maneuverability + " is not greater than previous maneuverability " +
                 player._maneuverability, player.maneuverability > player._maneuverability);
-    }
-
-    /**
-     * POWERUP_MANEUV_DECREASE
-     *      Once a maneuvarability powerup has been applied and runs out, maneuverability must
-     *          reduce back to normal
-     */
-    @Test
-    public void POWERUP_MANEUV_DECREASE() throws InterruptedException {
-        Player player = getMockPlayer();
-        ManeuverabilityPowerup powerup = new ManeuverabilityPowerup();
-
-        player.maneuverability = player._maneuverability; // Set to max speed
-
-        powerup.onCollide(player); // Start the temporary boost
 
         mockTicks(powerup::tick, ManeuverabilityPowerup.LENGTH + 1000); // Mock ticks in the background
 
@@ -123,11 +94,11 @@ public class PowerupTest {
     }
 
     /**
-     * POWERUP_ACC_INCREASE
-     *      An acceleration powerup will increase the Boat's acceleration
+     * POWERUP_ACC_INCREASE_TEMP
+     *      An acceleration powerup will increase the Boat's acceleration temporarily
      */
     @Test
-    public void POWERUP_ACC_INCREASE() {
+    public void POWERUP_ACC_INCREASE_TEMP() throws InterruptedException {
         Player player = getMockPlayer();
         AccelerationPowerup powerup = new AccelerationPowerup();
 
@@ -137,21 +108,6 @@ public class PowerupTest {
 
         assertTrue(player.acceleration + " is not greater than previous acceleration " +
                 player._acceleration, player.acceleration > player._acceleration);
-    }
-
-    /**
-     * POWERUP_ACC_DECREASE
-     *      Once an acceleration powerup has been applied and runs out, acceleration must
-     *          reduce back to normal
-     */
-    @Test
-    public void POWERUP_ACC_DECREASE() throws InterruptedException {
-        Player player = getMockPlayer();
-        AccelerationPowerup powerup = new AccelerationPowerup();
-
-        player.acceleration = player._acceleration; // Set to max acceleration
-
-        powerup.onCollide(player); // Start the temporary boost
 
         mockTicks(powerup::tick, AccelerationPowerup.LENGTH + 1000); // Mock ticks in the background
 
@@ -162,11 +118,11 @@ public class PowerupTest {
     }
 
     /**
-     * POWERUP_SPRINT_INCREASE
-     *      A sprint powerup will increase the Boat's current speed and speed
+     * POWERUP_SPRINT_INCREASE_TEMP
+     *      A sprint powerup will increase the Boat's current speed and speed temporarily
      */
     @Test
-    public void POWERUP_SPRINT_INCREASE() {
+    public void POWERUP_SPRINT_INCREASE_TEMP() throws InterruptedException {
         Player player = getMockPlayer();
         SprintPowerup powerup = new SprintPowerup();
 
@@ -180,27 +136,13 @@ public class PowerupTest {
         String output = String.format("Player's current_speed(%f) and speed(%f) has not increased, " +
                 "old current_speed(%f) speed(%f)", player.current_speed, player.speed, previousCurrentSpeed, previousSpeed);
         assertTrue(output, player.current_speed > previousCurrentSpeed && player.speed > previousCurrentSpeed);
-    }
-
-    /**
-     * POWERUP_SPRINT_DECREASE
-     *      Once a sprint powerup has been taken, both the current speed and speed must decrease back
-     *          to normal
-     */
-    @Test
-    public void POWERUP_SPRINT_DECREASE() throws InterruptedException {
-        Player player = getMockPlayer();
-        SprintPowerup powerup = new SprintPowerup();
-
-
-        powerup.onCollide(player); // Start the temporary boost
 
         mockTicks(powerup::tick, SprintPowerup.LENGTH + 1000); // Mock ticks in the background
+
         Thread.sleep(SprintPowerup.LENGTH + 1000); // Wait until boost runs out, with offset
 
         assertTrue(player.current_speed + " is still greater than their maximum speed "
                 + player._speed, player.current_speed <= player._speed);
     }
-
 
 }
