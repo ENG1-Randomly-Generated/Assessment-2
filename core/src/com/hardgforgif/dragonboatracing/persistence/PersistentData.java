@@ -17,7 +17,8 @@ public class PersistentData {
 
 
     /**
-     * Generate persistant data
+     * Generate persistent data for the entire game
+     *      This should encapsulate the entire game data for reloading
      */
     public PersistentData(Game game) {
         this.player = new PersistentBoatData(game.player, 0);
@@ -29,6 +30,10 @@ public class PersistentData {
         this.gameData = new PersistentGameData();
     }
 
+    /**
+     * Load this saved game state
+     * @param game Game to load into
+     */
     public void load(Game game) {
         this.gameData.loadGameData();
         game.player = this.player.toPlayer(game);

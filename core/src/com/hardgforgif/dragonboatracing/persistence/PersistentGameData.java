@@ -18,6 +18,10 @@ public class PersistentGameData {
     public float currentTimer = 0f;
     public float[] difficulty;
 
+    /**
+     * Generate persistent data from GameData
+     *      This saves important GameData that is required for pertaining a game state
+     */
     public PersistentGameData() {
         this.boatTypes = GameData.boatTypes;
         this.standings = GameData.standings;
@@ -28,6 +32,9 @@ public class PersistentGameData {
         this.difficulty = GameData.difficulty;
     }
 
+    /**
+     * Load this saved state into the GameData
+     */
     public void loadGameData() {
         GameData.boatTypes = this.boatTypes;
         GameData.standings = this.standings;

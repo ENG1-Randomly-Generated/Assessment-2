@@ -12,14 +12,21 @@ public class PersistentPowerupData {
     public String type;
     public float scale;
 
-
+    /**
+     * Generate persistent data for a given powerup
+     * @param powerup Powerup to generate persistent data for
+     */
     public PersistentPowerupData(Powerup powerup) {
         this.position = powerup.body.getPosition();
         this.type = powerup.typeName;
         this.scale = powerup.scale;
     }
 
-
+    /**
+     * Create a Powerup object for this given saved powerup state
+     * @param game Game we are loading into
+     * @return Powerup - Powerup object that reflects this saved state
+     */
     public Powerup toPowerup(Game game) {
         Powerup powerup;
         switch(this.type) {

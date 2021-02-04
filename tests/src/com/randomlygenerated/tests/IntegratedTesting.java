@@ -72,7 +72,7 @@ public class IntegratedTesting extends Game {
             powerup.createObstacleBody(world[GameData.currentLeg], plyPos.x, (plyPos.y + 2), 0f);
             player.lane.powerups.add(powerup);
 
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.F3) && GameData.currentLeg < 3) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.F3) && GameData.currentLeg < 2) {
             // F3 = skip leg
             GameData.results.add(new Float[] {0f,0f,0f,0f});
             GameData.gamePlayState = false;
