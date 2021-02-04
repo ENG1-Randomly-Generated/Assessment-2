@@ -113,8 +113,10 @@ public class Map {
     /**
      * Instantiates the lane array and spawns obstacles on each of the lanes
      * @param world World to spawn the obstacles in
+     * @param obstacles - Amount of obstacles to create in each lane
+     * @param powerups - Amount of powerups to create in each lane
      */
-    public void createLanes(World world){
+    public void createLanes(World world, int obstacles, int powerups) {
 
         // CHANGED: Making this code neater by using a loop to reduce redundancy
         MapLayer[] layers = {
@@ -128,8 +130,8 @@ public class Map {
         for (int i = 0; i < 4; i++) {
             lanes[i] = new Lane(mapHeight, layers[i], layers[i+1]);
             lanes[i].constructBoundries(this.unitScale);
-            lanes[i].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
-            lanes[i].spawnPowerups(world, mapHeight / GameData.PIXELS_TO_TILES, 30);
+            lanes[i].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, obstacles);
+            lanes[i].spawnPowerups(world, mapHeight / GameData.PIXELS_TO_TILES, powerups);
         }
 
     }

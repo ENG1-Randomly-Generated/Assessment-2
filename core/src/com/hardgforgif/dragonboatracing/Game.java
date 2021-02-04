@@ -61,37 +61,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
-		// Initialise the world and the map arrays
-		world = new World[3];
-		map = new Map[3];
-		for (int i = 0; i < 3; i++){
-			// Initialize the physics game World
-			world[i] = new World(new Vector2(0f, 0f), true);
-
-			// Initialize the map
-			map[i] = new Map("Map1/Map1.tmx", w);
-
-			// Calculate the ratio between pixels, meters and tiles
-			GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
-			GameData.PIXELS_TO_TILES = 1/(GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
-
-			// Create the collision with the land
-			map[i].createMapCollisions("CollisionLayerLeft", world[i]);
-			map[i].createMapCollisions("CollisionLayerRight", world[i]);
-
-			// Create the lanes, and the obstacles in the physics game world
-			map[i].createLanes(world[i]);
-
-			// Create the finish line
-			map[i].createFinishLine("finishLine.png");
-
-			// Create a new collision handler for the world
-			createContactListener(world[i]);
-		}
-
 		// Initialize the camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);
+
+		// Initialise the world and the map arrays
+		this.resetWorld();
 
 		// Set the app's input processor
 		Gdx.input.setInputProcessor(this);
@@ -472,10 +447,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	}
 
 	/**
-	 * Reset the world
-	 * ADD: This is needed elsewhere for loading.
+	 * Reset the world to default state
 	 */
 	public void resetWorld() {
+		// CHANGED: Added this as this exact code was repeated twice
+
 		camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
 		camera.update();
 		world = new World[3];
@@ -496,7 +472,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			map[i].createMapCollisions("CollisionLayerRight", world[i]);
 
 			// Create the lanes, and the obstacles in the physics game world
-			map[i].createLanes(world[i]);
+			map[i].createLanes(world[i], 20 + (10 * i), 5); // CHANGED; num of obstacles change
+																			// as legs progress
 
 			// Create the finish line
 			map[i].createFinishLine("finishLine.png");
