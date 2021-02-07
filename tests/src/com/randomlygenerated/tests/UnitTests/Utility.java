@@ -23,6 +23,11 @@ import static org.mockito.Mockito.mock;
  */
 public class Utility {
 
+    /**
+     * Interface to mock ticks in the game,
+     *      use with mockTicks() to simulate repeated
+     *          render cycles or code execution on a separate thread
+     */
     public interface TickCommand {
         void tick();
     }
@@ -50,7 +55,7 @@ public class Utility {
      * Mock the ticking of an Entity or class for the
      *  purpose of testing
      *
-     * @param command - TickCommand interface with given command to run every tick
+     * @param command - TickCommand interface with given code to run every tick
      * @param time - Time in milliseconds to run mockticks for
      */
     public static void mockTicks(TickCommand command, long time) {
@@ -68,6 +73,13 @@ public class Utility {
         }).start();
     }
 
+    /**
+     * Create and return a mocked version of Game that can perform and run correctly
+     *      Note: World collisions do not perform in this mocked-game, but you can perform the main render loop
+     * @param createBodies - Whether to create the World bodies for each boat in the game. Set to
+     *                      false if you want to spawn boats at pre-defined positions
+     * @return Game - Mocked Game ready for use in testing
+     */
     public static Game getMockGame(boolean createBodies) {
         Game game = new Game();
         game.map = new Map[] {getMockMap(), getMockMap(), getMockMap()};
@@ -92,30 +104,61 @@ public class Utility {
         return game;
     }
 
+    /**
+     * Return a mocked Map object that contains mocked lanes
+     * @return Map - Mocked Map
+     */
     public static Map getMockMap() {
         Map map = mock(Map.class);
         map.lanes = new Lane[] {getMockLane(), getMockLane(), getMockLane(), getMockLane()};
         return map;
     }
 
+    /**
+     * Return a World object for testing
+     * @return World
+     */
     public static World getMockWorld() {
         return new World(new Vector2(0,0), true);
     }
 
+    /**
+     * Return a Lane object with mocked MapLayers
+     * @return Lane
+     */
     public static Lane getMockLane() {
         return new Lane(9000, mock(MapLayer.class), mock(MapLayer.class));
     }
 
+    /**
+     * Return an AI object with the given Lane
+     *      The Boat will have stats 100,100,100,100
+     * @param lane - Lane to assign this AI to
+     * @return AI
+     */
     public static AI getMockAI(Lane lane) {
         return new AI(100, 100, 100, 100, 1, lane);
     }
 
+    /**
+     * Return an AI object with a mocked Lane
+     * @return AI
+     */
     public static AI getMockAI() {
         return getMockAI(getMockLane());
     }
 
+    /**
+     * Return a Player object with the given Lane
+     * @param lane - Lane to assign Player to
+     * @return Player
+     */
     public static Player getMockPlayer(Lane lane) { return new Player(100, 100, 100, 100, 1, lane); }
 
+    /**
+     * Return a Player with a mocked Lane
+     * @return Player
+     */
     public static Player getMockPlayer() { return getMockPlayer(getMockLane()); }
 
 }
