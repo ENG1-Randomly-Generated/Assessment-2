@@ -28,6 +28,7 @@ The latest and greatest racing game!
 
 * openjdk 8
 * JUnit
+* Gson
 
 ## Releasing
 To release, run the following at the root directory:
