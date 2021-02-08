@@ -127,7 +127,7 @@ public class Map {
                 tiledMap.getLayers().get("CollisionLayerRight")
         };
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < layers.length - 1; i++) {
             lanes[i] = new Lane(mapHeight, layers[i], layers[i+1]);
             lanes[i].constructBoundries(this.unitScale);
             lanes[i].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES, obstacles);

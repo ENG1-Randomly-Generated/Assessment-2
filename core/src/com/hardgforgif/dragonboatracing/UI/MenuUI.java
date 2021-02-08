@@ -14,19 +14,6 @@ public class MenuUI extends UI {
     private static final int LOGO_WIDTH = 400;
     private static final int LOGO_HEIGHT = 200;
     private static final int LOGO_Y = 450;
-
-    private static final int PLAY_BUTTON_WIDTH = 300;
-    private static final int PLAY_BUTTON_HEIGHT = 120;
-    private static final int PLAY_BUTTON_Y = 230;
-
-    private static final int EXIT_BUTTON_WIDTH = 250;
-    private static final int EXIT_BUTTON_HEIGHT = 120;
-    private static final int EXIT_BUTTON_Y = 100;
-
-    Texture playButtonActive;
-    Texture playButtonInactive;
-    Texture exitButtonActive;
-    Texture exitButtonInactive;
     Texture logo;
 
     ScrollingBackground scrollingBackground = new ScrollingBackground();
