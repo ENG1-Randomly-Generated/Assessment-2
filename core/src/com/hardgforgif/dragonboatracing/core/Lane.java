@@ -19,12 +19,13 @@ public class Lane {
     private MapLayer leftLayer;
     private MapLayer rightLayer;
     public ArrayList<Obstacle> obstacles; // CHANGED: Changed to ArrayList for dynamically updating this list
-                                          // It is much easier if we have the lane's obstacles ACTUALLY reflect the obstacles, rather than some redundant
-                                          // dead ones
+                                          // It is much easier if we have the lane's obstacles ACTUALLY reflect the obstacles,
+                                          // rather than some redundant dead ones
 
     public ArrayList<Powerup> powerups; // CHANGED: Added powerups for each lane
 
-    private Random random; // CHANGED: Making a Random object field instead of using one-off instatiations for efficiency reasons
+    private static Random random = new Random(); // CHANGED: Making a Random object field instead of using one-off
+                                                // instantiations for efficiency reasons
 
     public Lane(int mapHeight, MapLayer left, MapLayer right){
         leftBoundry = new float[mapHeight][2];
@@ -35,7 +36,6 @@ public class Lane {
 
         this.obstacles = new ArrayList<Obstacle>();
         this.powerups = new ArrayList<Powerup>();
-        this.random = new Random();
     }
 
     /**
@@ -92,7 +92,7 @@ public class Lane {
     public void spawnPowerups(World world, float mapHeight, int n) {
         float segmentLength = mapHeight / n;
         for (int i = 0; i < n; i++){
-            int randomPowerup = this.random.nextInt(5);
+            int randomPowerup = random.nextInt(5);
             float scale = 0f;
 
             Powerup powerup;
@@ -142,7 +142,7 @@ public class Lane {
     public void spawnObstacles(World world, float mapHeight, int n){
         float segmentLength = mapHeight / n;
         for (int i = 0; i < n; i++){
-            int randomIndex = new Random().nextInt(6);
+            int randomIndex = random.nextInt(6);
             float scale = 0f;
             if (randomIndex == 0 || randomIndex == 5)
                 scale = -0.8f;

@@ -11,7 +11,6 @@ import com.hardgforgif.dragonboatracing.core.Player;
 public class PauseUI extends UI {
 
     private ScrollingBackground scrollingBackground = new ScrollingBackground();
-    Game game;
 
     public PauseUI(Game game) {
         scrollingBackground.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
